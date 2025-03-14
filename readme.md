@@ -56,7 +56,15 @@ make
 5. 本程序使用灵足RS04电机，如使用其他型号电机请修改头文件参数。
 6. 本程序主要控制函数为`CAN_TX_test_thread`
 
-## 引用说明
+# 拓展
+> 若想要以本项目开发四足机器人，可配合强化学习训练代码、强化学习部署代码使用，相关开源库地址如下：
+> ```isaaclab训练代码地址： ```https://github.com/fan-ziqi/robot_lab
+>  ```仿真、实物部署代码地址： ```https://github.com/fan-ziqi/rl_sar
+>  ```相关机器人展示视频链接：``` https://www.bilibili.com/video/BV17oPEeHEfM/?share_source=copy_web&vd_source=97170e52311d304767c925aed213e556
+
+
+
+# 引用说明
 
 Please cite the following if you use this code or parts of it:
 
