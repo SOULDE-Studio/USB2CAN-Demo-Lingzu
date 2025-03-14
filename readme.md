@@ -5,7 +5,7 @@
 
 
 # 前期准备
-本程序需要与肥猫机器人公司USB2CAN模块配合使用，请准备好模块与模块说明书、模块SDK，`并按照说明书使用install.sh文件安装USB2CAN规则文件`；或手动安装规则文件，安装方法：
+本程序需要与肥猫机器人公司USB2CAN模块配合使用，请准备好模块与模块说明书、模块SDK，`并按照说明书使用install.sh文件安装USB2CAN规则文件，或手动安装规则文件，安装方法：`
 1. 进入项目目录下的can文件夹
 ```bash
 cd USB2CAN-Demo-Lingzu/can
@@ -29,7 +29,7 @@ https://pan.baidu.com/s/1EwYDNQ0jMKyTSvJEEcj6aw?pwd=10ob
 # 安装
 1. 克隆仓库到本地 :
 ```bash
-git clonehttps://github.com/SOULDE-Studio/USB2CAN-Demo-Lingzu.git
+git clone https://github.com/SOULDE-Studio/USB2CAN-Demo-Lingzu.git
 ```
 2. 进入项目目录 :
 ```bash
