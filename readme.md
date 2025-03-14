@@ -5,11 +5,25 @@
 
 
 # 前期准备
-本程序需要与肥猫机器人公司USB2CAN模块配合使用，请准备好模块与模块说明书、模块SDK，`并按照说明书使用install.sh文件安装USB2CAN规则文件`，
+本程序需要与肥猫机器人公司USB2CAN模块配合使用，请准备好模块与模块说明书、模块SDK，`并按照说明书使用install.sh文件安装USB2CAN规则文件`；或手动安装规则文件，安装方法：
+1. 进入项目目录下的can文件夹
+```bash
+cd USB2CAN-Demo-Lingzu/can
+```
+2. 复制规则文件usb_can.rules 到/etc/udev/rules.d/
+```bash
+sudo cp usb_can.rules /etc/udev/rules.d/
+```
+3. 运行下面的命令，使udev规则生效
+```bash
+sudo udevadm trigger
+```
+
 ```模块购买地址：```
 https://e.tb.cn/h.TBC18sl6EZKXUjL?tk=C5g5eLgyMf6HU071
 ```说明书以及SDK下载地址：```
 https://pan.baidu.com/s/1EwYDNQ0jMKyTSvJEEcj6aw?pwd=10ob
+
 
 
 # 安装
