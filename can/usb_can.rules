@@ -1,0 +1,4 @@
+KERNEL=="ttyACM*", ATTRS{idVendor}=="1483", ATTRS{idProduct}=="1110",MODE:="0666", SYMLINK+="USB2CAN0"
+KERNEL=="ttyACM*", ATTRS{idVendor}=="1483", ATTRS{idProduct}=="1111",MODE:="0666", SYMLINK+="USB2CAN1"
+KERNEL=="ttyACM*", ATTRS{idVendor}=="1483", ATTRS{idProduct}=="1112",MODE:="0666", SYMLINK+="USB2CAN2"
+KERNEL=="ttyACM*", ATTRS{idVendor}=="1483", ATTRS{idProduct}=="1113",MODE:="0666", SYMLINK+="USB2CAN3"
