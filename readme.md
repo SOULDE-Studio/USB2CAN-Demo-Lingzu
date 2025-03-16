@@ -19,11 +19,14 @@ sudo cp usb_can.rules /etc/udev/rules.d/
 sudo udevadm trigger
 ```
 
-```模块购买地址：```
+```USB转2路CAN模块购买地址：```
 https://e.tb.cn/h.TBC18sl6EZKXUjL?tk=C5g5eLgyMf6HU071
 
 ```说明书以及SDK下载地址：```
 https://pan.baidu.com/s/1EwYDNQ0jMKyTSvJEEcj6aw?pwd=10ob
+
+```灵足时代电机购买地址：```
+https://e.tb.cn/h.TAnAHUN38QORoTB?tk=zZ92eKjIaTxHU591
 
 
 
