@@ -120,7 +120,7 @@ void Tangair_usb2can::CAN_RX_device_0_thread()
             CAN_DEV0_RX.master_id = (info_rx.canID) & 0xff;
             CAN_DEV0_RX.motor_id = (info_rx.canID >> 8) & 0xff;
             CAN_DEV0_RX.fault_message = (info_rx.canID >> 16) & 0x3f;
-            CAN_DEV0_RX.motor_state = (info_rx.canID >> 21) & 0x03;
+            CAN_DEV0_RX.motor_state = (info_rx.canID >> 22) & 0x03;
             CAN_DEV0_RX.mode = (info_rx.canID >> 24) & 0x1f;
 
             CAN_DEV0_RX.current_position = (data_rx[0] << 8) | (data_rx[1]);
@@ -218,7 +218,7 @@ void Tangair_usb2can::CAN_RX_device_1_thread()
             CAN_DEV1_RX.master_id = (info_rx.canID) & 0xff;
             CAN_DEV1_RX.motor_id = (info_rx.canID >> 8) & 0xff;
             CAN_DEV1_RX.fault_message = (info_rx.canID >> 16) & 0x3f;
-            CAN_DEV1_RX.motor_state = (info_rx.canID >> 21) & 0x03;
+            CAN_DEV1_RX.motor_state = (info_rx.canID >> 22) & 0x03;
             CAN_DEV1_RX.mode = (info_rx.canID >> 24) & 0x1f;
 
             CAN_DEV1_RX.current_position = (data_rx[0] << 8) | (data_rx[1]);
