@@ -71,8 +71,9 @@ make
 > 
 >  ```仿真、实物部署代码地址： ```https://github.com/fan-ziqi/rl_sar
 > 
->  ```相关机器人展示视频链接：``` https://www.bilibili.com/video/BV17oPEeHEfM/?share_source=copy_web&vd_source=97170e52311d304767c925aed213e556
-> 
+>  ```相关机器人展示视频链接1：``` https://www.bilibili.com/video/BV17oPEeHEfM/?share_source=copy_web&vd_source=97170e52311d304767c925aed213e556
+>
+>  ```相关机器人展示视频链接2：```【性能释放！自研轮足机器人无视障碍如履平地】 https://www.bilibili.com/video/BV1APotYPEVQ/?share_source=copy_web&vd_source=97170e52311d304767c925aed213e556
 
 
 
