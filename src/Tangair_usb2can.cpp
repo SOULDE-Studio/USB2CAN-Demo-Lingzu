@@ -304,73 +304,73 @@ void Tangair_usb2can::CAN_TX_test_thread()
         USB2CAN0_CAN_Bus_1.ID_1_motor_send.speed = 2;
         USB2CAN0_CAN_Bus_1.ID_1_motor_send.torque = 0;
         USB2CAN0_CAN_Bus_1.ID_1_motor_send.kp = 0;
-        USB2CAN0_CAN_Bus_1.ID_1_motor_send.kd = 1;
+        USB2CAN0_CAN_Bus_1.ID_1_motor_send.kd = 20;
 
         USB2CAN0_CAN_Bus_1.ID_2_motor_send.position = 0;
         USB2CAN0_CAN_Bus_1.ID_2_motor_send.speed = 2;
         USB2CAN0_CAN_Bus_1.ID_2_motor_send.torque = 0;
         USB2CAN0_CAN_Bus_1.ID_2_motor_send.kp = 0;
-        USB2CAN0_CAN_Bus_1.ID_2_motor_send.kd = 1;
+        USB2CAN0_CAN_Bus_1.ID_2_motor_send.kd = 20;
 
         USB2CAN0_CAN_Bus_1.ID_3_motor_send.position = 0;
         USB2CAN0_CAN_Bus_1.ID_3_motor_send.speed = 2;
         USB2CAN0_CAN_Bus_1.ID_3_motor_send.torque = 0;
         USB2CAN0_CAN_Bus_1.ID_3_motor_send.kp = 0;
-        USB2CAN0_CAN_Bus_1.ID_3_motor_send.kd = 1;
+        USB2CAN0_CAN_Bus_1.ID_3_motor_send.kd = 20;
 
         USB2CAN0_CAN_Bus_2.ID_1_motor_send.position = 0;
         USB2CAN0_CAN_Bus_2.ID_1_motor_send.speed = 2;
         USB2CAN0_CAN_Bus_2.ID_1_motor_send.torque = 0;
         USB2CAN0_CAN_Bus_2.ID_1_motor_send.kp = 0;
-        USB2CAN0_CAN_Bus_2.ID_1_motor_send.kd = 1;
+        USB2CAN0_CAN_Bus_2.ID_1_motor_send.kd = 20;
 
         USB2CAN0_CAN_Bus_2.ID_2_motor_send.position = 0;
         USB2CAN0_CAN_Bus_2.ID_2_motor_send.speed = 2;
         USB2CAN0_CAN_Bus_2.ID_2_motor_send.torque = 0;
         USB2CAN0_CAN_Bus_2.ID_2_motor_send.kp = 0;
-        USB2CAN0_CAN_Bus_2.ID_2_motor_send.kd = 1;
+        USB2CAN0_CAN_Bus_2.ID_2_motor_send.kd = 20;
 
         USB2CAN0_CAN_Bus_2.ID_3_motor_send.position = 0;
         USB2CAN0_CAN_Bus_2.ID_3_motor_send.speed = 2;
         USB2CAN0_CAN_Bus_2.ID_3_motor_send.torque = 0;
         USB2CAN0_CAN_Bus_2.ID_3_motor_send.kp = 0;
-        USB2CAN0_CAN_Bus_2.ID_3_motor_send.kd = 1;
+        USB2CAN0_CAN_Bus_2.ID_3_motor_send.kd = 20;
 
         USB2CAN1_CAN_Bus_1.ID_1_motor_send.position = 0;
         USB2CAN1_CAN_Bus_1.ID_1_motor_send.speed = 2;
         USB2CAN1_CAN_Bus_1.ID_1_motor_send.torque = 0;
         USB2CAN1_CAN_Bus_1.ID_1_motor_send.kp = 0;
-        USB2CAN1_CAN_Bus_1.ID_1_motor_send.kd = 1;
+        USB2CAN1_CAN_Bus_1.ID_1_motor_send.kd = 20;
 
         USB2CAN1_CAN_Bus_1.ID_2_motor_send.position = 0;
         USB2CAN1_CAN_Bus_1.ID_2_motor_send.speed = 2;
         USB2CAN1_CAN_Bus_1.ID_2_motor_send.torque = 0;
         USB2CAN1_CAN_Bus_1.ID_2_motor_send.kp = 0;
-        USB2CAN1_CAN_Bus_1.ID_2_motor_send.kd = 1;
+        USB2CAN1_CAN_Bus_1.ID_2_motor_send.kd = 20;
 
         USB2CAN1_CAN_Bus_1.ID_3_motor_send.position = 0;
         USB2CAN1_CAN_Bus_1.ID_3_motor_send.speed = 2;
         USB2CAN1_CAN_Bus_1.ID_3_motor_send.torque = 0;
         USB2CAN1_CAN_Bus_1.ID_3_motor_send.kp = 0;
-        USB2CAN1_CAN_Bus_1.ID_3_motor_send.kd = 1;
+        USB2CAN1_CAN_Bus_1.ID_3_motor_send.kd = 20;
 
         USB2CAN1_CAN_Bus_2.ID_1_motor_send.position = 0;
         USB2CAN1_CAN_Bus_2.ID_1_motor_send.speed = 2;
         USB2CAN1_CAN_Bus_2.ID_1_motor_send.torque = 0;
         USB2CAN1_CAN_Bus_2.ID_1_motor_send.kp = 0;
-        USB2CAN1_CAN_Bus_2.ID_1_motor_send.kd = 1;
+        USB2CAN1_CAN_Bus_2.ID_1_motor_send.kd = 20;
 
         USB2CAN1_CAN_Bus_2.ID_2_motor_send.position = 0;
         USB2CAN1_CAN_Bus_2.ID_2_motor_send.speed = 2;
         USB2CAN1_CAN_Bus_2.ID_2_motor_send.torque = 0;
         USB2CAN1_CAN_Bus_2.ID_2_motor_send.kp = 0;
-        USB2CAN1_CAN_Bus_2.ID_2_motor_send.kd = 1;
+        USB2CAN1_CAN_Bus_2.ID_2_motor_send.kd = 20;
 
         USB2CAN1_CAN_Bus_2.ID_3_motor_send.position = 0;
         USB2CAN1_CAN_Bus_2.ID_3_motor_send.speed = 2;
         USB2CAN1_CAN_Bus_2.ID_3_motor_send.torque = 0;
         USB2CAN1_CAN_Bus_2.ID_3_motor_send.kp = 0;
-        USB2CAN1_CAN_Bus_2.ID_3_motor_send.kd = 1;
+        USB2CAN1_CAN_Bus_2.ID_3_motor_send.kd = 20;
     }
    
     //使能所有电机
