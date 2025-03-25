@@ -28,9 +28,9 @@ int float_to_uint(float x, float x_min, float x_max, int bits);
 #define V_MIN -15.0f
 #define V_MAX 15.0f
 #define KP_MIN 0.0f
-#define KP_MAX 500.0f
+#define KP_MAX 5000.0f
 #define KD_MIN 0.0f
-#define KD_MAX 5.0f
+#define KD_MAX 100.0f
 #define T_MIN -120.0f
 #define T_MAX 120.0f
 
