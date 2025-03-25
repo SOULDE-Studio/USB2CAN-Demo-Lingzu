@@ -13,8 +13,6 @@ void Tangair_usb2can::Spin()
     printf("~ ALL Exit ~\n");
 }
 
-
-
 /// @brief 构造函数，初始化
 /// @return
 Tangair_usb2can::Tangair_usb2can() 
@@ -90,8 +88,6 @@ Tangair_usb2can::~Tangair_usb2can()
 
     all_thread_done_ = true;
 }
-
-
 
 /// @brief can设备0，接收线程函数
 void Tangair_usb2can::CAN_RX_device_0_thread()
