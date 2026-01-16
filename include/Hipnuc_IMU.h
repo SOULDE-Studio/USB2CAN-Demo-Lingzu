@@ -25,7 +25,7 @@ public:
 
 	void IMU_Get_init_quat(int32_t dev);
 
-	void IMU_Get_offset_quat();
+	void IMU_Get_offset_quat(Eigen::Quaternionf q_desired);
 
 	void IMU_quat_correct(Hipnuc_IMU_Struct &IMU_data);
 
@@ -40,7 +40,7 @@ public:
 	uint8_t Data_CAN[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
     float Q_meas_init[4] = {1.0f, 0.0f, 0.0f, 0.0f}; // IMU初始测量四元数
-	Eigen::Quaternionf Q_desired{0.6003f, -0.6003f, -0.3735f, -0.3739f}; // (w, x, y, z) // 注意Eigen中四元数赋值的顺序，实数w在首；但是实际上它的内部存储顺序是[x y z w]
+	
     Eigen::Quaternionf Q_offset{Eigen::Quaternionf::Identity()};
     
 private:

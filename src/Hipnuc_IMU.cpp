@@ -48,7 +48,7 @@ void Hipnuc_IMU::IMU_Get_init_quat(int32_t dev)
     }
 }
 
-void Hipnuc_IMU::IMU_Get_offset_quat()
+void Hipnuc_IMU::IMU_Get_offset_quat(Eigen::Quaternionf q_desired)
 {
     // 创建Eigen四元数 (注意顺序：w, x, y, z)
     Eigen::Quaternionf q_meas(
@@ -60,10 +60,10 @@ void Hipnuc_IMU::IMU_Get_offset_quat()
     
     // 归一化
     q_meas.normalize();
-    Q_desired.normalize();
+    q_desired.normalize();
     
     // 计算校正四元数: Q_offset = Q_desired * q_meas.conjugate()
-    Q_offset = Q_desired * q_meas.conjugate();
+    Q_offset = q_desired * q_meas.conjugate();
     Q_offset.normalize();
     
     std::cout << "Calibration Complete!" << std::endl;

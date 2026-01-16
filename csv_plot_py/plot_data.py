@@ -297,35 +297,7 @@ def plot_motor_data_comparison(rx_csv_file, strategy_csv_file):
             print(f"速度图: {vel_path}")
         else:
             print("跳过保存图片")
-        
-        # save_choice = input("是否保存三张图片？(y/n): ").lower()
-        # if save_choice == 'y':
-        #     # 保存IMU图
-        #     imu_picture_path = input("请输入IMU图保存文件名（或直接回车使用默认文件名）: ").strip()
-        #     if not imu_picture_path:
-        #         base_name = os.path.basename(rx_csv_file).split('.')[0]
-        #         imu_picture_path = f"imu_comparison_{base_name}.png"
-        #     fig_imu.savefig(imu_picture_path, dpi=300, bbox_inches='tight')
-        #     print(f"IMU四元数对比图已保存为: {imu_picture_path}")
-            
-        #     # 保存位置图
-        #     pos_picture_path = input("请输入位置图保存文件名（或直接回车使用默认文件名）: ").strip()
-        #     if not pos_picture_path:
-        #         base_name = os.path.basename(rx_csv_file).split('.')[0]
-        #         pos_picture_path = f"motor_position_comparison_{base_name}.png"
-        #     fig_pos.savefig(pos_picture_path, dpi=300, bbox_inches='tight')
-        #     print(f"位置对比图已保存为: {pos_picture_path}")
-            
-        #     # 保存速度图
-        #     vel_picture_path = input("请输入速度图保存文件名（或直接回车使用默认文件名）: ").strip()
-        #     if not vel_picture_path:
-        #         base_name = os.path.basename(rx_csv_file).split('.')[0]
-        #         vel_picture_path = f"motor_velocity_comparison_{base_name}.png"
-        #     fig_vel.savefig(vel_picture_path, dpi=300, bbox_inches='tight')
-        #     print(f"速度对比图已保存为: {vel_picture_path}")
-        # else:
-        #     print("跳过保存图片")
-        
+
         # 显示图片
         print("\n显示IMU四元数对比图...")
         plt.figure(fig_imu.number)
@@ -366,7 +338,8 @@ def main():
         print(f"使用默认RX数据文件: {rx_file_path}")
     
     if not strategy_file_path:
-        strategy_file_path = "../figures_data/data/obs_env0_quat_pos_vel_25hz.csv"  # 读取文件路径
+        # strategy_file_path = "../figures_data/data/obs_env_csv1219/v2_obs_imuposvel.csv"  # 读取文件路径
+        strategy_file_path = "../figures_data/data/log_rx_505.csv"  # 读取文件路径
         print(f"使用默认Strategy数据文件: {strategy_file_path}")
     
     # 运行对比绘图函数

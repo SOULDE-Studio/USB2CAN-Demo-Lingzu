@@ -1,5 +1,56 @@
 #include "RS_motor.h"
 
+/// @brief 获取电机ID
+/// @param dev
+/// @param channel
+/// @param motor_id
+void RS_Motor::Get_MotorID(int32_t dev, uint8_t channel, uint32_t motor_id)
+{
+    ID_CAN.id = motor_id;
+    ID_CAN.exdata = 0xfd; // 主机ID
+    ID_CAN.mode = 0x00;
+    uint8_t read_channel;
+    FrameInfo info_rx;
+    uint8_t data_rx[8] = {0};
+    uint8_t recieve_re = 0;
+    uint16_t MotorID = 0;
+
+    txMsg_CAN_Motor.canID = ((ID_CAN.id & 0xff) | ((ID_CAN.exdata & 0xffff) << 8) | ((ID_CAN.mode & 0x1f) << 24));
+
+    for (int i = 0; i < 8; i++)
+    {
+        Data_CAN[i] = 0;
+    }
+    sendUSBCAN(dev, channel, &txMsg_CAN_Motor, Data_CAN);
+
+    // 有数据不会阻塞，若无数据则等待0.01s
+    recieve_re = readUSBCAN(dev, &read_channel, &info_rx, data_rx, 1e4);
+    if (recieve_re != -1)
+    {
+        MotorID = static_cast<uint16_t>((info_rx.canID >> 8) & 0xFFFF);
+        if (((info_rx.canID >> 24) & 0x1f) == 0x00) // 确认是ID响应帧
+        {
+            std::cout << "Motor ID is: " << MotorID << std::endl;
+        }
+    }
+    
+}
+
+/// @brief 设置电机ID
+/// @param dev 
+/// @param channel 
+/// @param old_motor_id 
+/// @param new_motor_id 
+void RS_Motor::Set_MotorID(int32_t dev, uint8_t channel, uint32_t old_motor_id, uint32_t new_motor_id)
+{
+    ID_CAN.id = old_motor_id;
+    ID_CAN.exdata = 0xfd | ((new_motor_id & 0xff) << 8); // 低8位:主机ID=0xfd, 高8位:new_motor_id
+    ID_CAN.mode = 0x07;
+
+    txMsg_CAN_Motor.canID = ((ID_CAN.id & 0xff) | ((ID_CAN.exdata & 0xffff) << 8) | ((ID_CAN.mode & 0x1f) << 24));
+    sendUSBCAN(dev, channel, &txMsg_CAN_Motor, Data_CAN);
+}
+
 /// @brief 电机使能
 /// @param dev
 /// @param channel
@@ -148,6 +199,97 @@ void RS_Motor::PP_Angle_Set(int32_t dev, uint8_t channel, uint32_t motor_id , fl
     Data_CAN[0] = 0x16;
     Data_CAN[1] = 0x70;
     std::memcpy(&Data_CAN[4], &angle, sizeof(angle));
+    sendUSBCAN(dev, channel, &txMsg_CAN_Motor, Data_CAN);
+}
+
+//////////////////////////////////////////
+/// @brief 电机速度模式最大电流设置
+/// @param dev
+/// @param channel
+/// @param motor_id
+/// @param cuurrentmax
+void RS_Motor::VEL_Current_Max_Set(int32_t dev, uint8_t channel, uint32_t motor_id , float cuurrentmax)
+{
+    ID_CAN.id = motor_id;
+    ID_CAN.exdata = 0xfd; // 主机ID
+    ID_CAN.mode = 0x12;
+
+    txMsg_CAN_Motor.canID = ((ID_CAN.id & 0xff) | ((ID_CAN.exdata & 0xffff) << 8) | ((ID_CAN.mode & 0x1f) << 24));
+    for (int i = 0; i < 8; i++)
+    {
+        Data_CAN[i] = 0;
+    }
+    
+    Data_CAN[0] = 0x18;
+    Data_CAN[1] = 0x70;
+    std::memcpy(&Data_CAN[4], &cuurrentmax, sizeof(cuurrentmax));
+    sendUSBCAN(dev, channel, &txMsg_CAN_Motor, Data_CAN);
+}
+
+/// @brief 电机速度模式最大加速度设置
+/// @param dev
+/// @param channel
+/// @param motor_id
+/// @param accmax
+void RS_Motor::VEL_Acc_Max_Set(int32_t dev, uint8_t channel, uint32_t motor_id , float accmax)
+{
+    ID_CAN.id = motor_id;
+    ID_CAN.exdata = 0xfd; // 主机ID
+    ID_CAN.mode = 0x12;
+
+    txMsg_CAN_Motor.canID = ((ID_CAN.id & 0xff) | ((ID_CAN.exdata & 0xffff) << 8) | ((ID_CAN.mode & 0x1f) << 24));
+    for (int i = 0; i < 8; i++)
+    {
+        Data_CAN[i] = 0;
+    }
+    
+    Data_CAN[0] = 0x22;
+    Data_CAN[1] = 0x70;
+    std::memcpy(&Data_CAN[4], &accmax, sizeof(accmax));
+    sendUSBCAN(dev, channel, &txMsg_CAN_Motor, Data_CAN);
+}
+
+/// @brief 电机速度模式初始化封装
+/// @param dev
+/// @param channel
+/// @param motor_id
+/// @param cuurrentmax
+/// @param accmax
+/// @param delay_us
+void RS_Motor::VEL_Mode_Set(int32_t dev, uint8_t channel, uint32_t motor_id, float cuurrentmax, float accmax, int delay_us)
+{
+    Motor_Mode_Change(dev, channel, motor_id, 2);
+    std::this_thread::sleep_for(std::chrono::microseconds(delay_us)); // 单位us
+
+    Motor_Enable(dev, channel, motor_id);
+    std::this_thread::sleep_for(std::chrono::microseconds(delay_us)); // 单位us
+
+    VEL_Current_Max_Set(dev, channel, motor_id, cuurrentmax);
+    std::this_thread::sleep_for(std::chrono::microseconds(delay_us)); // 单位us
+
+    VEL_Acc_Max_Set(dev, channel, motor_id, accmax);
+    std::this_thread::sleep_for(std::chrono::microseconds(delay_us)); // 单位us
+}
+
+/// @brief 电机速度模式速度设置（运动）
+/// @param dev
+/// @param channel
+/// @param motor_id
+/// @param vel
+void RS_Motor::VEL_Vel_Set(int32_t dev, uint8_t channel, uint32_t motor_id , float vel)
+{
+    ID_CAN.id = motor_id;
+    ID_CAN.exdata = 0xfd; // 主机ID
+    ID_CAN.mode = 0x12;
+
+    txMsg_CAN_Motor.canID = ((ID_CAN.id & 0xff) | ((ID_CAN.exdata & 0xffff) << 8) | ((ID_CAN.mode & 0x1f) << 24));
+    for (int i = 0; i < 8; i++)
+    {
+        Data_CAN[i] = 0;
+    }
+    Data_CAN[0] = 0x0A;
+    Data_CAN[1] = 0x70;
+    std::memcpy(&Data_CAN[4], &vel, sizeof(vel));
     sendUSBCAN(dev, channel, &txMsg_CAN_Motor, Data_CAN);
 }
 

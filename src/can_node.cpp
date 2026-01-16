@@ -6,6 +6,7 @@
 // cd build
 // cmake ..
 // make -j
+// 已写成脚本build_Zbot_RL.sh，直接运行脚本即可
 
 // 调用Motor_test类的编译步骤(根目录下执行)
 // rm -rf build
@@ -13,6 +14,7 @@
 // cd build
 // cmake -DUSE_MOTOR_TEST=ON ..
 // make -j
+// 已写成脚本Motor_test.sh，直接运行脚本即可
 
 // =================================================
 

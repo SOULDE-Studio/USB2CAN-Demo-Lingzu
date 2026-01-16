@@ -98,7 +98,8 @@ private:
 	int Motor_Ctrl_Mode;
 	
 	std::vector<float> zero_angles = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f}; // 初始角度--摆直
-	std::vector<float> init_angles = {0.312f, 0.837f, -2.02f, 2.02f, -0.837f, -0.312f}; // 初始角度--站立
+	// std::vector<float> init_angles = {0.312f, 0.837f, -2.02f, 2.02f, -0.837f, -0.312f}; // 初始角度--站立
+	std::vector<float> init_angles = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 	float range = 1.0f * PI;
 	// std::vector<float> lower_limit = {0.312f - range, 0.837f - range, -2.02f - range, 2.02f - range, -0.837f - range, -0.312f - range}; // 电机运行范围
 	// std::vector<float> upper_limit = {0.312f + range, 0.837f + range, -2.02f + range, 2.02f + range, -0.837f + range, -0.312f + range}; // 电机运行范围
@@ -106,18 +107,47 @@ private:
 	std::vector<float> upper_limit = {range, range, range, range, range, range}; // 电机运行范围
 
 	std::vector<float> Q_meas_init = {1.0f, 0.0f, 0.0f, 0.0f}; // IMU初始测量四元数
-	Eigen::Quaternionf Q_desired{0.6003f, -0.6003f, -0.3735f, -0.3739f}; // (w, x, y, z) // 注意Eigen中四元数赋值的顺序，实数w在首；但是实际上它的内部存储顺序是[x y z w]
+	// Eigen::Quaternionf Q_desired{0.6003f, -0.6003f, -0.3735f, -0.3739f}; // (w, x, y, z) // 注意Eigen中四元数赋值的顺序，实数w在首；但是实际上它的内部存储顺序是[x y z w]
+	Eigen::Quaternionf Q_desired{0.7070f, 0.0f, -0.7070f, 0.0f}; // (w, x, y, z) // 注意Eigen中四元数赋值的顺序，实数w在首；但是实际上它的内部存储顺序是[x y z w]
     Eigen::Quaternionf Q_offset{Eigen::Quaternionf::Identity()};
 
 	bool motor_zero_set_already; // 是否进行过零点设置
 
-    Motor_PDControl_Struct Zbot_RL_PD = {
+    Motor_PDControl_Struct Zbot1234_RL_PD = {
         .Feedforward_Torque = 0.0f,
 		.Tar_Position = 0.0f,
 		.Tar_Velocity = 0.0f,
-		.Kp = 50.0f,
-		.Kd = 5.0f,
+		.Kp = 20.0f,
+		.Kd = 2.0f,
     };
+	Motor_PDControl_Struct Zbot5_RL_PD = {
+        .Feedforward_Torque = 0.0f,
+		.Tar_Position = 0.0f,
+		.Tar_Velocity = 0.0f,
+		.Kp = 20.0f,
+		.Kd = 2.0f,
+    };
+	Motor_PDControl_Struct Zbot6_RL_PD = {
+        .Feedforward_Torque = 0.0f,
+		.Tar_Position = 0.0f,
+		.Tar_Velocity = 0.0f,
+		.Kp = 20.0f,
+		.Kd = 2.0f,
+    };
+	// Motor_PDControl_Struct Zbot5_RL_PD = {
+    //     .Feedforward_Torque = 0.0f,
+	// 	.Tar_Position = 0.0f,
+	// 	.Tar_Velocity = 0.0f,
+	// 	.Kp = 25.0f,
+	// 	.Kd = 3.0f,
+    // };
+	// Motor_PDControl_Struct Zbot6_RL_PD = {
+    //     .Feedforward_Torque = 0.0f,
+	// 	.Tar_Position = 0.0f,
+	// 	.Tar_Velocity = 0.0f,
+	// 	.Kp = 70.0f,
+	// 	.Kd = 5.0f,
+    // };
 
 	// ************************************************ 接收线程相关变量和成员 ************************************************ //
 	

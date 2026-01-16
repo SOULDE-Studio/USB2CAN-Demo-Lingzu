@@ -75,10 +75,13 @@ Zbot_RL::Zbot_RL()
             IMU.IMU_Send_SYNC(USB2CAN0_, 1);
             IMU.IMU_Get_init_quat(USB2CAN0_);
         }
-        IMU.IMU_Get_offset_quat(); // 计算校正四元数
+        IMU.IMU_Get_offset_quat(Q_desired); // 计算校正四元数，Q_desired为期望初始四元数
         sleep(1);
     }
     // ********************************************************************** 创 立 线 程 ********************************************************************** //
+    // 读取csv作为策略输入
+    csv_data = loadCSV_invec("../figures_data/data/obs_env_csv1219/v2_obs.csv");
+    csv_index = 0;
 
     // 获取当前系统时间戳
     std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> tpMill =
@@ -103,7 +106,7 @@ Zbot_RL::Zbot_RL()
 #ifdef USE_LIBTORCH
     // 尝试加载模型（可选），路径可在运行时替换
     try {
-        policy_model = std::make_shared<torch::jit::script::Module>(torch::jit::load("/home/rain/libtorch/export_model/wakling_policy_v2.pt"));
+        policy_model = std::make_shared<torch::jit::script::Module>(torch::jit::load("/home/rain/libtorch/export_model/policy_standupsymmetry0.5.pt"));
         model_loaded = true;
         std::cout << "Policy model loaded." << std::endl;
     } catch (const std::exception &e) {
@@ -155,7 +158,7 @@ void Zbot_RL::CAN_RX_device_0_thread()
         uint8_t channel;
         FrameInfo info_rx;
         uint8_t data_rx[8] = {0};
-        LogFrame log_rx_data;
+        // LogFrame log_rx_data;
 
         can_dev0_rx_count_thread++;
 
@@ -213,31 +216,31 @@ void Zbot_RL::CAN_RX_device_0_thread()
                 }
             }
 
-            float logtime_now = getTimestamp();
+            // float logtime_now = getTimestamp();
 
-            log_rx_data.timestamp = logtime_now;
-            {
-                std::lock_guard<std::mutex> lock(mutex_DEV0_RX);
+            // log_rx_data.timestamp = logtime_now;
+            // {
+            //     std::lock_guard<std::mutex> lock(mutex_DEV0_RX);
 
-                log_rx_data.motor_pos[0] = DEV0_RX.Module_CAN_Recieve[0].Motor_Recieve.current_position_f;
-                log_rx_data.motor_pos[1] = DEV0_RX.Module_CAN_Recieve[1].Motor_Recieve.current_position_f;
-                log_rx_data.motor_pos[2] = DEV0_RX.Module_CAN_Recieve[2].Motor_Recieve.current_position_f;
-                log_rx_data.motor_pos[3] = DEV0_RX.Module_CAN_Recieve[3].Motor_Recieve.current_position_f;
-                log_rx_data.motor_pos[4] = DEV0_RX.Module_CAN_Recieve[4].Motor_Recieve.current_position_f;
-                log_rx_data.motor_pos[5] = DEV0_RX.Module_CAN_Recieve[5].Motor_Recieve.current_position_f;
+            //     log_rx_data.motor_pos[0] = DEV0_RX.Module_CAN_Recieve[0].Motor_Recieve.current_position_f;
+            //     log_rx_data.motor_pos[1] = DEV0_RX.Module_CAN_Recieve[1].Motor_Recieve.current_position_f;
+            //     log_rx_data.motor_pos[2] = DEV0_RX.Module_CAN_Recieve[2].Motor_Recieve.current_position_f;
+            //     log_rx_data.motor_pos[3] = DEV0_RX.Module_CAN_Recieve[3].Motor_Recieve.current_position_f;
+            //     log_rx_data.motor_pos[4] = DEV0_RX.Module_CAN_Recieve[4].Motor_Recieve.current_position_f;
+            //     log_rx_data.motor_pos[5] = DEV0_RX.Module_CAN_Recieve[5].Motor_Recieve.current_position_f;
 
-                log_rx_data.motor_vel[0] = DEV0_RX.Module_CAN_Recieve[0].Motor_Recieve.current_speed_f;
-                log_rx_data.motor_vel[1] = DEV0_RX.Module_CAN_Recieve[1].Motor_Recieve.current_speed_f;
-                log_rx_data.motor_vel[2] = DEV0_RX.Module_CAN_Recieve[2].Motor_Recieve.current_speed_f;
-                log_rx_data.motor_vel[3] = DEV0_RX.Module_CAN_Recieve[3].Motor_Recieve.current_speed_f;
-                log_rx_data.motor_vel[4] = DEV0_RX.Module_CAN_Recieve[4].Motor_Recieve.current_speed_f;
-                log_rx_data.motor_vel[5] = DEV0_RX.Module_CAN_Recieve[5].Motor_Recieve.current_speed_f;
-            }
+            //     log_rx_data.motor_vel[0] = DEV0_RX.Module_CAN_Recieve[0].Motor_Recieve.current_speed_f;
+            //     log_rx_data.motor_vel[1] = DEV0_RX.Module_CAN_Recieve[1].Motor_Recieve.current_speed_f;
+            //     log_rx_data.motor_vel[2] = DEV0_RX.Module_CAN_Recieve[2].Motor_Recieve.current_speed_f;
+            //     log_rx_data.motor_vel[3] = DEV0_RX.Module_CAN_Recieve[3].Motor_Recieve.current_speed_f;
+            //     log_rx_data.motor_vel[4] = DEV0_RX.Module_CAN_Recieve[4].Motor_Recieve.current_speed_f;
+            //     log_rx_data.motor_vel[5] = DEV0_RX.Module_CAN_Recieve[5].Motor_Recieve.current_speed_f;
+            // }
 
-            {
-                std::lock_guard<std::mutex> lock(mutex_log_rx_queue);
-                log_rx_queue.push(log_rx_data);
-            }
+            // {
+            //     std::lock_guard<std::mutex> lock(mutex_log_rx_queue);
+            //     log_rx_queue.push(log_rx_data);
+            // }
         }
     }
     std::cout << "CAN_RX_device_0_thread  Exit~~" << std::endl;
@@ -347,9 +350,6 @@ void Zbot_RL::Strategy_thread()
     // const std::chrono::milliseconds period(100); // 10Hz
     LogFrame log_strategy_data;
 
-    csv_data = loadCSV_invec("../figures_data/data/obs_env0.csv");
-    csv_index = 0;
-
     while (running_)
     {
         auto t0 = std::chrono::steady_clock::now();
@@ -401,20 +401,26 @@ void Zbot_RL::Strategy_thread()
         {
             try {
                 // 构造输入tensor：模型接受输入
+                // std::vector<float> invec = {cur_quat_w, cur_quat_x, cur_quat_y, cur_quat_z, 
+                //                             cur_pos[0] - init_angles[0], cur_pos[1] - init_angles[1], cur_pos[2] - init_angles[2], cur_pos[3] - init_angles[3], cur_pos[4] - init_angles[4], cur_pos[5] - init_angles[5],
+                //                             cur_vel[0], cur_vel[1], cur_vel[2], cur_vel[3], cur_vel[4], cur_vel[5],
+                //                             out_last[0], out_last[1], out_last[2], out_last[3], out_last[4], out_last[5],
+                //                             input_copy
+                //                            };
                 std::vector<float> invec = {cur_quat_w, cur_quat_x, cur_quat_y, cur_quat_z, 
                                             cur_pos[0] - init_angles[0], cur_pos[1] - init_angles[1], cur_pos[2] - init_angles[2], cur_pos[3] - init_angles[3], cur_pos[4] - init_angles[4], cur_pos[5] - init_angles[5],
                                             cur_vel[0], cur_vel[1], cur_vel[2], cur_vel[3], cur_vel[4], cur_vel[5],
-                                            out_last[0], out_last[1], out_last[2], out_last[3], out_last[4], out_last[5],
-                                            input_copy
+                                            out_last[0], out_last[1], out_last[2], out_last[3], out_last[4], out_last[5]
                                            };
 
-                // // ---- 读取CSV作为策略输入 ----
+                // ---- 读取CSV作为策略输入 ----
                 // std::vector<float> invec;
                 // if (csv_index < csv_data.size()) {
                 //     invec = csv_data[csv_index++];
                 // } else {
-                //     // 播放完就停在最后一行
-                //     invec = csv_data.back();
+                //     // 播放完就停在最后一行 // 停不住：虽然out不变,relative_tensor一直增加
+                //     // invec = csv_data.back();
+                //     return;  // 直接退出当前策略线程函数
                 // }
 
                 at::Tensor input_tensor = torch::from_blob(invec.data(), {1, (long)invec.size()}).clone();
@@ -439,7 +445,8 @@ void Zbot_RL::Strategy_thread()
                     float time_now = getTimestamp();
                     log_strategy_data.timestamp = time_now;
                     for (size_t i = 0; i < 6; ++i) {
-                        log_strategy_data.motor_pos[i] = cur_pos[i] - init_angles[i];
+                        // log_strategy_data.motor_pos[i] = cur_pos[i] - init_angles[i];
+                        log_strategy_data.motor_pos[i] = position_output[i] - init_angles[i];
                         log_strategy_data.motor_vel[i] = cur_vel[i];
                     }
                     log_strategy_data.imu_quat[0] = cur_quat_w;
@@ -692,27 +699,27 @@ void Zbot_RL::ALL_Motor_PD_Control(int delay_us, std::vector<float> motor_angles
 {
     auto t = std::chrono::high_resolution_clock::now();//这一句耗时50us
 
-    Motor.Motor_PD_Control(USB2CAN0_, 2, 0x01, &Zbot_RL_PD, -motor_angles[0]); // 电机顺时针为角度增加，所以加负号
+    Motor.Motor_PD_Control(USB2CAN0_, 2, 0x01, &Zbot1234_RL_PD, -motor_angles[0]); // 电机顺时针为角度增加，所以加负号
     t += std::chrono::microseconds(delay_us);
     std::this_thread::sleep_until(t);
 
-    Motor.Motor_PD_Control(USB2CAN0_, 1, 0x04, &Zbot_RL_PD, -motor_angles[3]); // 电机顺时针为角度增加，所以加负号
+    Motor.Motor_PD_Control(USB2CAN0_, 1, 0x04, &Zbot1234_RL_PD, -motor_angles[3]); // 电机顺时针为角度增加，所以加负号
     t += std::chrono::microseconds(delay_us);
     std::this_thread::sleep_until(t);
 
-    Motor.Motor_PD_Control(USB2CAN0_, 2, 0x02, &Zbot_RL_PD, -motor_angles[1]); // 电机顺时针为角度增加，所以加负号
+    Motor.Motor_PD_Control(USB2CAN0_, 2, 0x02, &Zbot1234_RL_PD, -motor_angles[1]); // 电机顺时针为角度增加，所以加负号
     t += std::chrono::microseconds(delay_us);
     std::this_thread::sleep_until(t);
 
-    Motor.Motor_PD_Control(USB2CAN0_, 1, 0x05, &Zbot_RL_PD, -motor_angles[4]); // 电机顺时针为角度增加，所以加负号
+    Motor.Motor_PD_Control(USB2CAN0_, 1, 0x05, &Zbot5_RL_PD, -motor_angles[4]); // 电机顺时针为角度增加，所以加负号
     t += std::chrono::microseconds(delay_us);
     std::this_thread::sleep_until(t);
 
-    Motor.Motor_PD_Control(USB2CAN0_, 2, 0x03, &Zbot_RL_PD, -motor_angles[2]); // 电机顺时针为角度增加，所以加负号
+    Motor.Motor_PD_Control(USB2CAN0_, 2, 0x03, &Zbot1234_RL_PD, -motor_angles[2]); // 电机顺时针为角度增加，所以加负号
     t += std::chrono::microseconds(delay_us);
     std::this_thread::sleep_until(t);
 
-    Motor.Motor_PD_Control(USB2CAN0_, 1, 0x06, &Zbot_RL_PD, -motor_angles[5]); // 电机顺时针为角度增加，所以加负号
+    Motor.Motor_PD_Control(USB2CAN0_, 1, 0x06, &Zbot6_RL_PD, -motor_angles[5]); // 电机顺时针为角度增加，所以加负号
     t += std::chrono::microseconds(delay_us);
     std::this_thread::sleep_until(t);
 }

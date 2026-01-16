@@ -44,30 +44,39 @@ Motor_test::Motor_test()
 
     // ********************************************************************** 初 始 化 ********************************************************************** //
     
-    Motor.Motor_Enable(USB2CAN0_, 1, motor_ID); // 使能电机1
-    Read_Clear(USB2CAN0_, 5); // 清理5条接收缓存
-    sleep(1);
-    init_angle = - Motor.Angle_Read(USB2CAN0_, 1, motor_ID); // 读取当前电机角度，作为初始角度，电机顺时针为角度增加，所以加负号
-    std::cout << std::endl
-            << "InitAngle:" << init_angle << std::endl;
-    Motor.Motor_PD_Control(USB2CAN0_, 1, motor_ID, &Motor_test_PD, -init_angle); // 注意：电机顺时针为角度增加，所以加负号
-    sleep(3);
+    // Motor.Motor_Enable(USB2CAN0_, 1, motor_ID); // 使能电机1
+    // Read_Clear(USB2CAN0_, 5); // 清理5条接收缓存
+    // sleep(1);
+    // init_angle = - Motor.Angle_Read(USB2CAN0_, 1, motor_ID); // 读取当前电机角度，作为初始角度，电机顺时针为角度增加，所以加负号
+    // std::cout << std::endl
+    //         << "InitAngle:" << init_angle << std::endl;
+    // Motor.Motor_PD_Control(USB2CAN0_, 1, motor_ID, &Motor_test_PD, -init_angle); // 注意：电机顺时针为角度增加，所以加负号
+    // sleep(3);
+    Motor.Set_MotorID(USB2CAN0_, 1, 0x06, 0x05);
+    std::this_thread::sleep_for(std::chrono::microseconds(10000)); // 单位us
+
+    for (int i = 0; i < 256; i++)
+    {
+        Motor.Get_MotorID(USB2CAN0_, 1, i); // 获取电机ID
+        std::this_thread::sleep_for(std::chrono::microseconds(500)); // 单位us
+    }
+    std::cout << "OVER" << std::endl;
 
     // ********************************************************************** 创 立 线 程 ********************************************************************** //
 
-    // 获取当前系统时间戳
-    std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> tpMill =
-        std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
-    start_tp = tpMill.time_since_epoch().count();
+    // // 获取当前系统时间戳
+    // std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> tpMill =
+    //     std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
+    // start_tp = tpMill.time_since_epoch().count();
 
-    // 创建CAN接收线程，设备1
-    _Test_RX_thread = std::thread(&Motor_test::Test_RX_thread, this);
+    // // 创建CAN接收线程，设备1
+    // _Test_RX_thread = std::thread(&Motor_test::Test_RX_thread, this);
 
-    // CAN发送线程
-    _Test_TX_thread = std::thread(&Motor_test::Test_TX_thread, this);
+    // // CAN发送线程
+    // _Test_TX_thread = std::thread(&Motor_test::Test_TX_thread, this);
 
-    // 记录线程（50Hz）
-    _Test_Log_thread = std::thread(&Motor_test::Test_Log_thread, this);
+    // // 记录线程（50Hz）
+    // _Test_Log_thread = std::thread(&Motor_test::Test_Log_thread, this);
 }
 
 /// @brief 析构函数

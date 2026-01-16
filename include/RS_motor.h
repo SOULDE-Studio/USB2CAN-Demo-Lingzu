@@ -6,6 +6,7 @@
 #include <cstring>
 #include <thread>
 #include <chrono>
+#include <iostream>
 
 // 灵足电机,此处为RS00参数，其他电机请自行修改或参考电机调试工具上显示的参数
 //https://can.robotsfan.com/motor/robstride/desktop.html
@@ -71,14 +72,21 @@ class RS_Motor
 {
 public:
 
+	// 电机ID获取函数
+	void Get_MotorID(int32_t dev, uint8_t channel, uint32_t motor_id);
+
+	// 设置电机ID函数
+	void Set_MotorID(int32_t dev, uint8_t channel, uint32_t old_motor_id, uint32_t new_motor_id);
+
     // 电机使能和失能函数
 	void Motor_Enable(int32_t dev, uint8_t channel, uint32_t motor_id);
 
 	void Motor_Disable(int32_t dev, uint8_t channel, uint32_t motor_id);
 
-	// 电机PP模式初始化相关函数
+	// 电机模式切换函数
 	void Motor_Mode_Change(int32_t dev, uint8_t channel, uint32_t motor_id , uint8_t mode);
 
+	// 电机PP模式相关函数
 	void PP_Vel_Max_Set(int32_t dev, uint8_t channel, uint32_t motor_id , float velmax);
 
 	void PP_Acc_Set(int32_t dev, uint8_t channel, uint32_t motor_id , float acc);
@@ -86,6 +94,15 @@ public:
 	void PP_Mode_Set(int32_t dev, uint8_t channel, uint32_t motor_id, float velmax, float acc, int delay_us);
 
 	void PP_Angle_Set(int32_t dev, uint8_t channel, uint32_t motor_id , float angle);
+
+	// 电机速度模式相关函数
+	void VEL_Current_Max_Set(int32_t dev, uint8_t channel, uint32_t motor_id , float currentmax);
+
+	void VEL_Acc_Max_Set(int32_t dev, uint8_t channel, uint32_t motor_id , float accmax);
+
+	void VEL_Mode_Set(int32_t dev, uint8_t channel, uint32_t motor_id , float currentmax, float accmax, int delay_us);
+
+	void VEL_Vel_Set(int32_t dev, uint8_t channel, uint32_t motor_id , float speed);
 
 	// 电机零位设置函数
 	void Motor_Zero_Set(int32_t dev, uint8_t channel, uint32_t motor_id);
